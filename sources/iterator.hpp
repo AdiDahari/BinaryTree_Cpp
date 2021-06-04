@@ -1,8 +1,8 @@
 #pragma once
 #include "Node.hpp"
-#include "BinaryTree.hpp"
 #include <iostream>
-using namespace std;
+// #include <stack>
+// using namespace std;
 namespace ariel
 {
 
@@ -26,38 +26,31 @@ namespace ariel
 
         preOrder_itr &operator++()
         {
-            if (ptr != nullptr)
+            if (ptr->left != nullptr)
             {
-                if (ptr->left != nullptr)
+                ptr = ptr->left;
+            }
+            else if (ptr->right != nullptr)
+            {
+                ptr = ptr->right;
+            }
+            else
+            {
+                while (ptr->parent != nullptr && ptr == ptr->parent->left && ptr->parent->right == nullptr)
                 {
-                    ptr = ptr->left;
+                    ptr = ptr->parent;
                 }
-                else if (ptr->right != nullptr)
+                while (ptr->parent != nullptr && ptr->parent->right == ptr)
                 {
-                    ptr = ptr->right;
+                    ptr = ptr->parent;
+                }
+                if (ptr->parent == nullptr)
+                {
+                    ptr = nullptr;
                 }
                 else
                 {
-
-                    if (ptr->parent != nullptr && ptr->parent->left != nullptr && ptr == ptr->parent->left)
-                    {
-                        ptr = ptr->parent->right;
-                    }
-                    else
-                    {
-                        while (ptr->parent != nullptr && ptr == ptr->parent->right)
-                        {
-                            ptr = ptr->parent;
-                        }
-                        if (ptr->parent != nullptr && ptr == ptr->parent->left && ptr->parent->right != nullptr)
-                        {
-                            ptr = ptr->parent->right;
-                        }
-                        else
-                        {
-                            ptr = nullptr;
-                        }
-                    }
+                    ptr = ptr->parent->right;
                 }
             }
             return *this;

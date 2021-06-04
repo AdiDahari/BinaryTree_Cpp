@@ -28,40 +28,41 @@ namespace ariel
             return search;
         }
 
-        void tree_copy(const Node<T> &src_root, Node<T> &dest_root)
+        void tree_copy(Node<T> *dest, const Node<T> *src)
         {
-            if (src_root.left != nullptr)
+            if (src->left != nullptr)
             {
-                dest_root.left = new Node(src_root.left->val);
-                tree_copy(*dest_root.left, *src_root.left);
+                dest->left = new Node<T>(src->left->val);
+                dest->left->parent = dest;
+
+                tree_copy(dest->left, src->left);
             }
 
-            if (src_root.right != nullptr)
+            if (src->right != nullptr)
             {
-                dest_root.right = new Node(src_root.right->val);
-                tree_copy(*dest_root.right, *src_root.right);
+                dest->right = new Node<T>(src->right->val);
+                dest->right->parent = dest;
+
+                tree_copy(dest->right, src->right);
             }
-        };
+        }
+
         void delete_nodes(Node<T> *root)
         {
             if (root != nullptr)
             {
                 delete_nodes(root->left);
                 delete_nodes(root->right);
-                delete root;
             }
-        };
+            delete root;
+        }
 
     public:
-        BinaryTree() : root(nullptr){};
+        BinaryTree() : root(nullptr) {}
         BinaryTree(const BinaryTree &other)
         {
-            if (other.root != nullptr)
-            {
-                root = new Node<T>(other.root->val);
-                tree_copy(*root, *other.root);
-                delete_nodes(other.root);
-            }
+            root = new Node<T>(other.root->val);
+            tree_copy(root, other.root);
         }
         BinaryTree(BinaryTree &&other) noexcept
         {
@@ -70,30 +71,29 @@ namespace ariel
         }
 
         ~BinaryTree() { delete_nodes(root); };
-        BinaryTree &operator=(const BinaryTree &other)
+        BinaryTree &operator=(const BinaryTree<T> &other)
         {
-            if (this == &other)
-            {
-                return *this;
-            }
-            if (root != nullptr)
+            if (this != &other)
             {
                 delete_nodes(root);
+                root = new Node<T>(other.root->val);
+                tree_copy(root, other.root);
             }
-            root = new Node(other.root->val);
-            tree_copy(*other.root, *root);
             return *this;
         }
-        BinaryTree &operator=(BinaryTree &&other) noexcept
+        BinaryTree &operator=(BinaryTree<T> &&other) noexcept
         {
-            if (root != nullptr)
+            if (this != &other)
             {
+
                 delete_nodes(root);
+
+                root = other.root;
+                other, root = nullptr;
             }
-            root = other.root;
-            other.root = nullptr;
+            return *this;
         }
-        BinaryTree &add_root(const T &v)
+        BinaryTree &add_root(const T v)
         {
             if (root != nullptr)
             {
@@ -104,42 +104,55 @@ namespace ariel
                 root = new Node<T>(v);
             }
             return *this;
-        };
+        }
         BinaryTree &add_left(T s, T n)
         {
-            if (this->root == nullptr)
+            if (root == nullptr)
             {
                 throw "Root hasn't been initialized yet\n";
             }
             Node<T> *src = find_node(root, s);
             if (src != nullptr)
             {
-                src->left = new Node<T>(n);
-                src->left->parent = src;
+                if (src->left != nullptr)
+                {
+                    src->left->val = n;
+                }
+                else
+                {
+                    src->left = new Node<T>(n);
+                    src->left->parent = src;
+                }
                 return *this;
             }
             throw "Source value does not exist in tree\n";
-        };
+        }
         BinaryTree &add_right(T s, T n)
         {
-            if (this->root == nullptr)
+            if (root == nullptr)
             {
                 throw "Root hasn't been initialized yet\n";
             }
             Node<T> *src = find_node(root, s);
             if (src != nullptr)
             {
-                src->right = new Node<T>(n);
-                src->right->parent = src;
-
+                if (src->right != nullptr)
+                {
+                    src->right->val = n;
+                }
+                else
+                {
+                    src->right = new Node<T>(n);
+                    src->right->parent = src;
+                }
                 return *this;
             }
             throw "Source value does not exist in tree\n";
-        };
+        }
         friend std::ostream &operator<<(std::ostream &os, const BinaryTree &t)
         {
             return os;
-        };
+        }
 
         auto begin()
         {
