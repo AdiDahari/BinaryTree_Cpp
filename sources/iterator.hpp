@@ -1,6 +1,7 @@
 #pragma once
 #include "Node.hpp"
 #include <iostream>
+#include <string>
 // #include <stack>
 // using namespace std;
 namespace ariel
@@ -34,15 +35,30 @@ namespace ariel
             {
                 ptr = ptr->right;
             }
+            // create the following tree
+            //                    1
+            //              2          3
+            //         4        5
+            //               10   11
+            //             20       23
+            //           50  60
             else
             {
-                while (ptr->parent != nullptr && ptr == ptr->parent->left && ptr->parent->right == nullptr)
+                while (ptr->parent != nullptr && ptr->parent->right == nullptr)
                 {
                     ptr = ptr->parent;
+                    while (ptr->parent != nullptr && (ptr == ptr->parent->right || ptr->parent->right == nullptr))
+                    {
+                        ptr = ptr->parent;
+                    }
                 }
                 while (ptr->parent != nullptr && ptr->parent->right == ptr)
                 {
                     ptr = ptr->parent;
+                    while (ptr->parent != nullptr && ptr->parent->right == nullptr)
+                    {
+                        ptr = ptr->parent;
+                    }
                 }
                 if (ptr->parent == nullptr)
                 {
@@ -53,6 +69,7 @@ namespace ariel
                     ptr = ptr->parent->right;
                 }
             }
+
             return *this;
         }
 
@@ -180,6 +197,10 @@ namespace ariel
         T *operator->() const
         {
             return &(ptr->val);
+        }
+        uint get_level()
+        {
+            return ptr->level;
         }
 
         inOrder_itr &operator++()

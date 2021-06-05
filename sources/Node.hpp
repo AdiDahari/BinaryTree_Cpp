@@ -8,8 +8,8 @@ namespace ariel
         Node *left;
         Node *right;
         Node *parent;
-
-        Node(const T &v) : val(v), left(nullptr), right(nullptr), parent(nullptr) {}
+        uint level;
+        Node(const T &v) : val(v), left(nullptr), right(nullptr), parent(nullptr), level(0) {}
         Node() : left(nullptr), right(nullptr), parent(nullptr) {}
     };
 }

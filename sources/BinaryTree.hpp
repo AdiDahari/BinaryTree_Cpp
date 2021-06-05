@@ -1,14 +1,17 @@
 #pragma once
 #include <iostream>
+#include <string>
+#include <vector>
 #include "iterator.hpp"
 #include "Node.hpp"
-
+const int CNT = 5;
 namespace ariel
 {
     template <typename T>
     class BinaryTree
     {
     private:
+        uint max_level = 0;
         Node<T> *root;
         Node<T> *find_node(Node<T> *curr, T v)
         {
@@ -34,7 +37,7 @@ namespace ariel
             {
                 dest->left = new Node<T>(src->left->val);
                 dest->left->parent = dest;
-
+                dest->left->level = dest->level + 1;
                 tree_copy(dest->left, src->left);
             }
 
@@ -42,7 +45,7 @@ namespace ariel
             {
                 dest->right = new Node<T>(src->right->val);
                 dest->right->parent = dest;
-
+                dest->right->level = dest->level + 1;
                 tree_copy(dest->right, src->right);
             }
         }
@@ -62,11 +65,13 @@ namespace ariel
         BinaryTree(const BinaryTree &other)
         {
             root = new Node<T>(other.root->val);
+            max_level = other.max_level;
             tree_copy(root, other.root);
         }
         BinaryTree(BinaryTree &&other) noexcept
         {
             root = other.root;
+            max_level = other.max_level;
             other.root = nullptr;
         }
 
@@ -77,6 +82,7 @@ namespace ariel
             {
                 delete_nodes(root);
                 root = new Node<T>(other.root->val);
+                max_level = other.max_level;
                 tree_copy(root, other.root);
             }
             return *this;
@@ -89,7 +95,8 @@ namespace ariel
                 delete_nodes(root);
 
                 root = other.root;
-                other, root = nullptr;
+                max_level = other.max_level;
+                other.root = nullptr;
             }
             return *this;
         }
@@ -122,6 +129,11 @@ namespace ariel
                 {
                     src->left = new Node<T>(n);
                     src->left->parent = src;
+                    src->left->level = src->level + 1;
+                    if (src->left->level > max_level)
+                    {
+                        max_level = src->left->level;
+                    }
                 }
                 return *this;
             }
@@ -144,14 +156,15 @@ namespace ariel
                 {
                     src->right = new Node<T>(n);
                     src->right->parent = src;
+                    src->right->level = src->level + 1;
+                    if (src->right->level > max_level)
+                    {
+                        max_level = src->right->level;
+                    }
                 }
                 return *this;
             }
             throw "Source value does not exist in tree\n";
-        }
-        friend std::ostream &operator<<(std::ostream &os, const BinaryTree &t)
-        {
-            return os;
         }
 
         auto begin()
@@ -192,6 +205,44 @@ namespace ariel
         auto end_postorder()
         {
             return postOrder_itr<T>{};
+        }
+
+        const Node<T> *get_root() const { return root; }
+
+        friend std::ostream &operator<<(std::ostream &os, const BinaryTree &t)
+        {
+
+            return BinaryTree::print(t.get_root(), os);
+        }
+        /*
+        print method idea taken from GeeksForGeeks:
+        https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
+
+        */
+        static std::ostream &print(const Node<T> *root, std::ostream &os)
+        {
+            using namespace std;
+
+            print_util(os, root, 0);
+
+            return os;
+        }
+
+        static void print_util(std::ostream &os, const Node<T> *base, int space)
+        {
+            using namespace std;
+            if (base)
+            {
+                space += CNT;
+                print_util(os, base->right, space);
+                os << endl;
+                for (int i = CNT; i < space; i++)
+                {
+                    os << " ";
+                }
+                os << base->val << "\n";
+                print_util(os, base->left, space);
+            }
         }
     };
 }
