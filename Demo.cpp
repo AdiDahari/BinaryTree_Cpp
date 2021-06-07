@@ -17,7 +17,27 @@ ostream &print_counting_tree(ostream &os, int lim)
     {
         int_tree.add_right(lim / 2, lim);
     }
-    os << int_tree << endl;
+    os << int_tree << endl
+       << endl;
+    os << "Preorder Traversal of the tree is:" << endl;
+    for (auto i = int_tree.begin_preorder(); i != int_tree.end_preorder(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
+    os << "Inorder Traversal of the tree is:" << endl;
+    for (auto i = int_tree.begin(); i != int_tree.end(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
+    os << "Postorder Traversal of the tree is:" << endl;
+    for (auto i = int_tree.begin_postorder(); i != int_tree.end_postorder(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
+
     return os;
 }
 
@@ -41,7 +61,26 @@ ostream &print_string_tree(ostream &os, string &s)
     {
         string_tree.add_right(v[count], v[v.size() - 1]);
     }
-    os << string_tree << endl;
+    os << string_tree << endl
+       << endl;
+    os << "Preorder Traversal of the tree is:" << endl;
+    for (auto i = string_tree.begin_preorder(); i != string_tree.end_preorder(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
+    os << "Inorder Traversal of the tree is:" << endl;
+    for (auto i = string_tree.begin(); i != string_tree.end(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
+    os << "Postorder Traversal of the tree is:" << endl;
+    for (auto i = string_tree.begin_postorder(); i != string_tree.end_postorder(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
     return os;
 }
 ostream &print_char_tree(ostream &os, string s)
@@ -63,7 +102,27 @@ ostream &print_char_tree(ostream &os, string s)
     {
         char_tree.add_right(v[count], v[v.size() - 1]);
     }
-    os << char_tree << endl;
+    os << char_tree << endl
+       << endl;
+
+    os << "Preorder Traversal of the tree is:" << endl;
+    for (auto i = char_tree.begin_preorder(); i != char_tree.end_preorder(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
+    os << "Inorder Traversal of the tree is:" << endl;
+    for (auto i = char_tree.begin(); i != char_tree.end(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
+    os << "Postorder Traversal of the tree is:" << endl;
+    for (auto i = char_tree.begin_postorder(); i != char_tree.end_postorder(); ++i)
+    {
+        os << *i << " ";
+    }
+    os << endl;
     return os;
 }
 
