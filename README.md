@@ -6,8 +6,6 @@ Iteration modes:
 preorder, inorder, postorder.
 
 Class name: `BinaryTree`.
-השיטות הדרושות (ראו בקובץ [Demo.cpp](Demo.cpp) לפרטים):
-
 * `add_root` - Gets 1 input and makes it the root of the BinaryTree.
 * `add_left` - Gets 2 inputs: 1st is an existiong Node and 2nd is a new Leaf to be added as the Node's left. 
 * `add_right` - Same as above, but to Node's right.
